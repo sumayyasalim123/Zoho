@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show employee</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .bisque-card-body {
+            background-color: bisque;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- Logo and User Dashboard Heading -->
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <h1 style="color: coral; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: larger;">Online Service Provider</h1>
+        </a>
+
+        <!-- Button to toggle the navbar on small screens -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <!-- User Dashboard Heading (Visible on Mobile) -->
+                <li class="nav-item d-lg-none">
+                    <h1 style="color: coral; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: larger;">User Dashboard</h1>
+                </li>
+
+                <!-- Other Navbar Items -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        My Profile
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="{% url 'user_profile' user.id %}">View Profile</a>
+
+                        <a class="dropdown-item" href="{% url 'edit_user_profile' user.id %}">Edit Profile</a>
+                        <a class="dropdown-item" href="{% url 'reset_user_password'  %}">Change Password</a>
+
+
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'worker_approval_table'  %}">notifications</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'worker_list'  %}">View All Workers</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   WELCOME ADMIN 
+</body>
+</html>

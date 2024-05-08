@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Worker Approval Table</title>
+</head>
+<body>
+    <h1>Worker Approval Table</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <!-- Add more columns as needed -->
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tbody>
+                {% for p in pending %}
+                <tr>
+                    <td>{{p.user.first_name}} {{p.user.last_name}}</td>
+                   
+                    
+                    <td>{{p.user.username}}</td>
+                   
+                    <td colspan="2"><a href="{% url 'approve_worker' p.user.id %}"><button>Approve</button></a>
+                        <a href=""><button>Disapprove</button></a></td>
+    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </tbody>
+    </table>
+</body>
+</html>
+

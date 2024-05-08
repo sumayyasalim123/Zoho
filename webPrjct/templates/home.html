@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+    <style>
+        body{
+         background-image: url('{% static "image/homebg.jpg" %}');
+         background-repeat: no-repeat;
+         background-size: cover;
+        }
+        </style>
+
+
+<h1 class="display-1" style="margin-top: 200px;margin-left: 200px;">welcome</h1>
+   {% endblock %}

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+{% load static %}
+    <style>
+        body {
+        background-image: url('{% static "images/yellow.jpg" %}');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f2f2f2;
+}
+
+.table img {
+    width: 100%; /* Make sure images are responsive within cells */
+}
+
+/* Responsive styles */
+@media only screen and (max-width: 600px) {
+    .table th,
+    .table td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .table th {
+        text-align: center; /* Center header text */
+        display: none; /* Hide thead on smaller screens */
+    }
+
+    .table img {
+        width: 50%; /* Adjust image width for smaller screens */
+        margin: 0 auto; /* Center images */
+    }
+
+    .btn-group {
+        width: 100%; /* Make button group full width on smaller screens */
+        text-align: center; /* Center buttons */
+    }
+}
+    .card {
+        background-color: rgba(42, 41, 41, 0.7); /* Adjust the last value for transparency */
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    body {
+        font-family: "Lato", sans-serif;
+    }
+
+    body {
+        font-family: "Lato", sans-serif;
+    }
+
+    .navbar {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 15px;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .navbar-toggler {
+        padding: .25rem .75rem;
+        font-size: 1.25rem;
+        line-height: -17;
+        background-color: #000;
+        border: 1px solid #ffc107;
+        border-radius: .25rem;
+    }
+
+    @media (max-width: 576px) {
+        .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+        }
+    }
+    .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: .5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: 300px;
+}
+</style>
+     
+
+<body>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'index' %}"
+           style="color: black; font-size: 110%; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-style: italic;">LUXECART</a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'add_catogories' %}" style="color: black;">Add Category</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'add_products' %}" style="color: black;">Add Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'show_products' %}" style="color: black;">Product Details</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'show_user' %}" style="color: black;">User Details</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+          
+         
+<div class="container mt-5">
+  <h3 class=" text-center">SHOW USER DETAILS </h3>
+  <div class="row">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-10">
+          <table class="table text-center">
+            
+              <thead>
+                  <tr>
+                      <th scope="col">FIRST NAME</th>
+                      <th scope="col">LAST NAME</th>
+                      <th scope="col">USER NAME</th>
+                      <th scope="col">EMAIL</th>
+                      <th scope="col">ADDRESS</th>
+                  
+                      <th scope="col">CONTACT NUMBER</th>
+                      <th scope="col">PROFILE PICTURE</th>
+
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for e in user %}
+                  <tr>
+                      <td class="pt-4">{{e.user.first_name}}</td>
+                      <td class="pt-4">{{e.user.last_name}}</td>
+                      <td class="pt-4">{{e.user.username}}</td>
+                      <td class="pt-4">{{e.user.email}}</td>
+                      <td class="pt-4">{{e.address}}</td>
+                   
+                      <td class="pt-4">{{e.c_number}}</td>
+                      
+                     
+                     
+                      <td>
+                          {{e.profilepic}}<br>
+                          <img src="{{e.profilepic.url }}" class="w-25">
+                      </td>
+                      <td>
+                          
+                          <a rol="button" class="btn btn-success" href="{% url 'deleteuser' e.id %}">delete</a>
+                      </td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+
+          </table>
+         
+      </div>
+
+  </div>
+</div>
+          
+        </div>
+      </div>
+      
+    
+    
+</body>
+</html>
+

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Details with Reviews</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body style="text-align: center;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- Logo and User Dashboard Heading -->
+        <a class="navbar-brand" href="{% url 'admin_home' %}">
+            <h1 style="color: coral; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: larger;">Online Service Provider</h1>
+        </a>
+
+        <!-- Button to toggle the navbar on small screens -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <!-- User Dashboard Heading (Visible on Mobile) -->
+                <li class="nav-item d-lg-none">
+                    <h1 style="color: coral; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: larger;">User Dashboard</h1>
+                </li>
+
+                <!-- Other Navbar Items -->
+               
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'notifications_redirect' %}">
+                        <span class="notification-icon">
+                            <i class="fa fa-bell"></i>
+                            <span class="count">{{ unapp_worker_count}}</span>
+                        </span>
+                        Notifications</a>
+                </li>
+                
+                
+                
+                
+                
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_add_categories'  %}">add_categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'worker_list'  %}">View All Workers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'all_bookings'  %}">all bookings</a>
+                    
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Search
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="{% url 'worker_search' %}">Search Workers</a>
+                        <a class="dropdown-item" href="{% url 'admin_service_serch' %}">Search categories</a>
+
+
+
+                       
+
+                    </div>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
+    <div class="container" >
+
+        <h1 >{{ service.title }} Reviews</h1>
+       
+        <p style="color: coral;">Description: {{ service.description }}</p>
+        <p style="color: coral;">Price: Rs.{{ service.price }}/- per {{ service.get_duration_display }}</p>
+        
+        <h3>Reviews:</h3>
+        {% if reviews %}
+            {% for review in reviews %}
+            
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ review.bookings.user.user.username }}</h5>
+                        <div class="rating" style="color: gold;">
+                            {% if review.rating %}
+                            {% if review.rating == 1 %}
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i> 
+                                <i class="far fa-star"></i> 
+                                <i class="far fa-star"></i> 
+                                <i class="far fa-star"></i> 
+                            {% elif review.rating == 2 %}
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i> 
+                                <i class="far fa-star"></i> 
+                                <i class="far fa-star"></i> 
+                            {% elif review.rating == 3 %}
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i> 
+                                <i class="far fa-star"></i> 
+                            {% elif review.rating == 4 %}
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i> 
+                            {% elif review.rating == 5 %}
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            {% endif %}
+                            {% else %}
+                                No rating available
+                            {% endif %}
+                        </div>
+                        <div class="review">
+                            <p>{{ review.comments }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No reviews available for this service.</p>
+        {% endif %}
+    </div>
+
+
+    <button class="btn btn-info" onclick="goBack()">Back</button>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+      </script>
+
+
+     <!-- Footer -->
+<footer class="text-center text-lg-start bg-body-tertiary text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <!-- Left -->
+      <div class="me-5 d-none d-lg-block">
+        <span>Connect with us:</span>
+      </div>
+      <!-- Left -->
+  
+      <!-- Right -->
+      <div>
+        <a href="#" class="me-4 text-reset">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="me-4 text-reset">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="me-4 text-reset">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+  
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              ONLINE SERVICE PROVIDER
+            </h6>
+            <p>
+              Welcome to our home service center! We provide a wide range of home services to make your life easier.
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              Our Services
+            </h6>
+            <p>
+              <a href="#!" class="text-reset">Plumbing</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Electrical</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Carpentry</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Cleaning</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+            <!-- Contact -->
+            <h6 class="text-uppercase fw-bold mb-4">Contact Us</h6>
+            <p><i class="fas fa-home me-3"></i> 123 Home Street, City, Country</p>
+            <p>
+              <i class="fas fa-envelope me-3"></i>
+              info@homeservicecenter.com
+            </p>
+            <p><i class="fas fa-phone me-3"></i> +1 234 567 890</p>
+            <p><i class="fas fa-clock me-3"></i> Mon - Sat: 9:00 AM to 6:00 PM</p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+  
+    <!-- Footer text -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+      © 2024 Online Service Provider: All rights reserved.
+    </div>
+    <!-- Footer text -->
+  </footer>
+  <!-- Footer -->
+</body>
+</html>

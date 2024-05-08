@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Add any additional styles or link to a stylesheet here -->
+</head>
+<body>
+
+    <div>
+        <!-- Profile Picture -->
+        <img src="{{ member.profilepic.url }}" alt="{{ user.username }} Profile Picture">
+
+        <!-- User Details -->
+        <h1>{{ user.first_name }} {{ user.last_name }} Profile</h1>
+
+        <div>
+            <!-- User Information -->
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Address:</strong> {{ member.address }}</p>
+            <p><strong>Contact Number:</strong> {{ member.c_number }}</p>
+            <!-- Add more user details if needed -->
+
+            <!-- Edit and Back Buttons -->
+            <a href="{% url 'edit_user_profile' user.id %}">Edit Profile</a>
+            <a href="{% url 'user_home' %}">Back</a>
+        </div>
+    </div>
+
+</body>
+</html>

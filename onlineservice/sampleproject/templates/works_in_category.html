@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Works in Category</title>
+</head>
+<body>
+    <h1>Works in Category: {{ category_name }}</h1>
+
+    {% for work in works_in_category %}
+        <div class="work-card">
+            <!-- Display information about the work offered by the worker -->
+            <p>User: {{ work.user.username }}</p>
+            <p>Address: {{ work.a_ddress }}</p>
+            
+            <!-- Display profile picture -->
+            {% if work.profile_picture %}
+                <img src="{{ work.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+                <p>No profile picture available</p>
+            {% endif %}
+            
+            <!-- Add other information as needed -->
+        </div>
+    {% endfor %}
+</body>
+</html>
+

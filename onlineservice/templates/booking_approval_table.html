@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" >
+  <style>
+    .table-wrapper {
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Logo and User Dashboard Heading -->
+    <a class="navbar-brand" href="{% url 'worker_home'  %}">
+        <h1 style="color: coral; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: larger;">Online Service Provider</h1>
+    </a>
+
+    <!-- Button to toggle the navbar on small screens -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <!-- User Dashboard Heading (Visible on Mobile) -->
+            <li class="nav-item d-lg-none">
+                <h1 style="color: coral; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: larger;">worker Dashboard</h1>
+            </li>
+
+            <!-- Other Navbar Items -->
+            
+                </a> <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        My Profile
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                      <a class="dropdown-item" href="{% if user.is_authenticated %}{% url 'worker_profile' username=user.username %}{% else %}{% url 'login' %}{% endif %}">
+                        {% if user.is_authenticated %}View Profile{% else %}Login{% endif %}
+                    </a>
+                    
+
+                        <a class="dropdown-item card-link" href="{% if user.id %}{% url 'edit_worker_profile' user_id=user.id %}{% endif %}" style="color: black;">Edit Profile</a>
+
+                        <a class="dropdown-item" href="{% url 'reset_worker_password' username=user.username %}">Change Password</a>
+                       
+                        
+
+
+                    </div>
+                </li>
+
+               
+                    </a> <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           Service
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="{% url 'add_service'  %}">Add sevice</a>
+    
+    
+                            <a class="dropdown-item" href="{% url 'myservice' %}">My Service</a>
+
+                         
+    
+    
+                        </div>
+                    </li>   
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'booking_approval_table' %}">
+                          <span class="notification-icon">
+                              <i class="fa fa-bell"></i>
+                              <span class="count">{{pending_work}}</span>
+                          </span>
+                          Pending Works</a>
+                  </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'review_list' %}">View Reviews</a>
+
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'booking_approval' %}">
+                  <span class="notification-icon">
+                      <i class="fa fa-bell"></i>
+                      <span class="count">{{ booking_count }}</span>
+                  </span>
+                  Notifications
+              </a>
+          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'worker_logout'  %}"><button style="background-color: rgb(244, 218, 209);color: coral;">logout</button></a>
+          </li>
+           
+        </ul>
+    </div>
+</nav>
+<center>
+  
+<h1 style="margin-top: 100px;margin-bottom: 100px;">Worker task compleation table Table</h1>
+<div class="container mt-4">
+  <div class="row">
+      <div class="col-md-6 offset-md-3">
+          {% if error_message %}
+              <div class="alert alert-danger">{{ error_message }}</div>
+          {% endif %}
+          {% if messages %}
+              <div class="alert alert-success">
+                  {% for message in messages %}
+                      {{ message }}
+                  {% endfor %}
+              </div>
+          {% endif %}
+      </div>
+  </div>
+</div>
+  <div class="table-wrapper" style="margin-left: 60px;margin-right: 60px;">
+    <table class="table" style="background-color: bisque;">
+      <thead class="table-light" style="background-color: coral;">
+        <tr>
+          <th>User</th>
+          <th>User Address</th>
+          <th>Service Title</th>
+          <th>Service Duration</th>
+          <th>Date of Booking</th>
+          <th>Price</th>
+          <th>worker Approval</th>
+          
+          <th>status</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+      <tr>
+          <td>{{ booking.user.user.username }}</td> <!-- Fetch username of the logged-in user -->
+          <td>{{ booking.user.address }}</td> <!-- Fetch address of the corresponding Usermember -->
+          <td>{{ booking.service.title }}</td>
+          <td>{{ booking.service.get_duration_display }}</td>
+          <td>{{ booking.date_of_booking }}</td>
+          <td>{{ booking.service.price }}</td>
+          <td>
+              {% if booking.status == '1' %}
+              <span class="badge badge-warning"><button style="background-color: yellow;">pending</button></span>
+              {% elif booking.status == '2' %}
+              <span class="badge badge-success"><button style="background-color: green;">Approved</button></span>
+              
+              {% elif booking.status == '3' %}
+              <span class="badge badge-danger"><button style="background-color: red;">Disapproved</button></span>
+              {% endif %}
+          </td>
+        
+          <td>
+            <form method="post" action="{% url 'mark_compleated' booking.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success" style="background-color: yellowgreen;">Mark Completed</button>
+            </form>
+        </td>
+        
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</center>
+   <!-- Footer -->
+   <footer class="text-center text-lg-start bg-body-tertiary text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <!-- Left -->
+      <div class="me-5 d-none d-lg-block">
+        <span>Connect with us:</span>
+      </div>
+      <!-- Left -->
+  
+      <!-- Right -->
+      <div>
+        <a href="#" class="me-4 text-reset">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="me-4 text-reset">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="me-4 text-reset">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+  
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              ONLINE SERVICE PROVIDER
+            </h6>
+            <p>
+              Welcome to our home service center! We provide a wide range of home services to make your life easier.
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              Our Services
+            </h6>
+            <p>
+              <a href="#!" class="text-reset">Plumbing</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Electrical</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Carpentry</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Cleaning</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+            <!-- Contact -->
+            <h6 class="text-uppercase fw-bold mb-4">Contact Us</h6>
+            <p><i class="fas fa-home me-3"></i> 123 Home Street, City, Country</p>
+            <p>
+              <i class="fas fa-envelope me-3"></i>
+              info@homeservicecenter.com
+            </p>
+            <p><i class="fas fa-phone me-3"></i> +1 234 567 890</p>
+            <p><i class="fas fa-clock me-3"></i> Mon - Sat: 9:00 AM to 6:00 PM</p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+  
+    <!-- Footer text -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+      © 2024 Online Service Provider: All rights reserved.
+    </div>
+    <!-- Footer text -->
+  </footer>
+  <!-- Footer -->
+</body>
+</html>
+
+

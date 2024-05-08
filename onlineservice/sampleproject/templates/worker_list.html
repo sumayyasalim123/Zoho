@@ -1,0 +1,41 @@
+<!-- worker_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker List</title>
+</head>
+<body>
+
+<h2>Worker List</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact Number</th>
+            <th>Address</th>
+            <th>Category</th>
+            <th>Experience</th>
+            <th>View Certificate</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for worker in workers %}
+            <tr>
+                <td><a href="{% url 'worker_details' worker.id %}">{{ worker.user.first_name }}</a></td>
+                <td>{{ worker.user.email }}</td>
+                <td>{{ worker.contactnumber }}</td>
+                <td>{{ worker.a_ddress }}</td>
+                <td>{{ worker.categories.category_name }}</td>
+                <td>{{ worker.experience }}</td>
+                <td><a href="{% if worker.certificate %}{{ worker.certificate.url }}{% else %}#{% endif %}" target="_blank">View Certificate</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

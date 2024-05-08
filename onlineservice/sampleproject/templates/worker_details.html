@@ -1,0 +1,25 @@
+<!-- worker_details.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Details</title>
+</head>
+<body>
+
+<h2>Worker Details</h2>
+
+<ul>
+    <li><strong>Name:</strong> {{ worker.user.first_name }}</li>
+    <li><strong>Username:</strong> {{ worker.user.username }}</li>
+    <li><strong>Email:</strong> {{ worker.user.email }}</li>
+    <li><strong>Address:</strong> {{ worker.a_ddress }}</li>
+    <li><strong>Contact Number:</strong> {{ worker.contactnumber }}</li>
+    <li><strong>Category:</strong> {{ worker.categories.category_name }}</li>
+    <li><strong>Experience:</strong> {{ worker.experience }}</li>
+    <li><strong>Certificate:</strong> <a href="{{ worker.certificate.url }}" target="_blank">View Certificate</a></li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+{% load static %}
+    <style>
+body{
+         background-image: url('{% static "images/yellow.jpg" %}');
+         background-repeat:repeat;
+         background-size: cover;
+        }
+.card {
+      background-color: rgba(42, 41, 41, 0.7); /* Adjust the last value for transparency */
+      padding: 20px;
+      border-radius: 10px;}
+      
+body {
+  font-family: "Lato", sans-serif;
+}
+.navbar {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-toggler {
+    padding: .25rem .75rem;
+    font-size: 1.25rem;
+    line-height: -17;
+    background-color: #000;
+    border: 1px solid #ffc107;
+    border-radius: .25rem;
+}
+   
+
+</style>
+     
+
+<body>
+
+ 
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'index' %}" style="color: black; font-size: 110%; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-style: italic;">LUXECART</a>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'add_catogories' %}" style="color: black;">Add Category</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'add_products' %}" style="color: black;">Add Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'show_products' %}" style="color: black;">Product Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'show_user' %}" style="color: black;">User Details</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+      <center>
+
+      <div class="transparent-card" style="margin-top: 50PX;text-align: center;">
+        <!-- Your card content goes here -->
+        <h2 style="margin-top: 100px;" >Add Products</h2>  
+<div class="row" >
+    <div class="col-md-2"></div>
+    <div class="col-md-8 mt-5">
+        <div class="card p-3">
+          <form enctype="multipart/form-data" method="post" action="{% url 'add_productdb' %}">
+                {% csrf_token %}
+                <div class="row"><br><br><br>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                    
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                      <input type="text" name="pname" class="form-control mt-3" placeholder="Enter product name">
+                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                      
+                    <input type="text" name="description" class="form-control mt-3" placeholder="Enter description">
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                    
+                  <input type="text" name="price" class="form-control mt-3" placeholder="Enter Price">
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                  
+                <label>upload product photo</label>
+                <input type="file" name="file" class="form-control mt-3" accept="images/*"><br><br>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+                
+              <select name="sel"  class="form-control mt-3" style="width: 100px;" >
+                {% for c in category %}
+                <option value="{{c.id}}">{{c.catogory_name}}</option>
+                {%  endfor %}
+            </select>
+            </div>
+        </div>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4 mt-3">
+                      <button type="submit" class="btn btn-dark">SUBMIT </button>
+                    </div>
+                <div class="col-md-4"></div>
+            </form>
+        </div>
+    </div>
+</div>
+    </div>
+    </center>
+
+     <!-- Footer -->
+  <footer style="margin-top: 20px;" class="bg-body-tertiary text-center">
+    <!-- Grid container -->
+    <div class="container p-4">
+      <!-- Section: Social media -->
+      <section class="mb-4">
+        <!-- Facebook -->
+        <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i
+            class="fab fa-facebook-f"></i></a>
+
+        <!-- Twitter -->
+        <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i
+            class="fab fa-twitter"></i></a>
+
+        <!-- Google -->
+        <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i
+            class="fab fa-google"></i></a>
+
+        <!-- Instagram -->
+        <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i
+            class="fab fa-instagram"></i></a>
+
+        <!-- Linkedin -->
+        <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i
+            class="fab fa-linkedin-in"></i></a>
+
+        <!-- Github -->
+        <a data-mdb-ripple-init class="btn btn-outline btn-floating m-1" href="#!" role="button"><i
+            class="fab fa-github"></i></a>
+      </section>
+      <!-- Section: Social media -->
+
+      <!-- Section: Form -->
+      <section class="">
+        <form action="">
+          <!--Grid row-->
+          <div class="row d-flex justify-content-center">
+            <!--Grid column-->
+            <div class="col-auto">
+              <p class="pt-2">
+                <strong>Sign up for our Best collections</strong>
+              </p>
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-md-5 col-12">
+              <!-- Email input -->
+              <div data-mdb-input-init class="form-outline mb-4">
+                <input type="email" id="form5Example24" class="form-control" />
+                <label class="form-label" for="form5Example24">Email address</label>
+              </div>
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-auto">
+              <!-- Submit button -->
+              <button data-mdb-ripple-init type="submit" class="btn btn-outline mb-4">
+                Subscribe
+              </button>
+            </div>
+            <!--Grid column-->
+          </div>
+          <!--Grid row-->
+        </form>
+      </section>
+      <!-- Section: Form -->
+
+      <!-- Section: Text -->
+      <section class="mb-4">
+        <p>
+          LuxeCart Inc. is an American multinational technology company focusing on e-commerce, cloud computing,
+          online advertising, digital streaming, and artificial intelligence. It is considered one of the Big Five
+          American technology companies, alongside Alphabet (parent company of Google), Apple, Meta (parent company of
+          Facebook) and Microsoft.
+        </p>
+      </section>
+      <!-- Section: Text -->
+
+      <!-- Section: Links -->
+      <section class="">
+        <!--Grid row-->
+        <div class="row">
+          <!--Grid column-->
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase">Links</h5>
+
+            <ul class="list-unstyled mb-0">
+              <li>
+                <a class="text-body" href="#!">About</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">Home</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">Contact</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">Shop</a>
+              </li>
+            </ul>
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase">Links</h5>
+
+            <ul class="list-unstyled mb-0">
+              <li>
+                <a class="text-body" href="#!">Adress</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">DEtails</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">delivery</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">terms and conditions</a>
+              </li>
+            </ul>
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase">Links</h5>
+
+            <ul class="list-unstyled mb-0">
+              <li>
+                <a class="text-body" href="#!">shop with us follow the links below</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">Link 2</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">Link 3</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">Link 4</a>
+              </li>
+            </ul>
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase">Links</h5>
+
+            <ul class="list-unstyled mb-0">
+              <li>
+                <a class="text-body" href="#!">coustomer care</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">Help</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">Queries</a>
+              </li>
+              <li>
+                <a class="text-body" href="#!">ph:9876789999</a>
+              </li>
+            </ul>
+          </div>
+          <!--Grid column-->
+        </div>
+        <!--Grid row-->
+      </section>
+      <!-- Section: Links -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+      © 2020 Copyright:
+      <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+    
+</body>
+</html>
+

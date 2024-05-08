@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: aquamarine;">
+    <center>
+        <h1>Employee Details.....</h1>
+        <table border="2px">
+            <thead>
+                <tr>
+                    <th>EMPLOYEE ID</th>
+                    <th>EMPLOYEE NAME</th>
+                    <th>DEPARTMENT</th>
+                    <th>AGE</th>
+                    <th>EMAIL ID</th>
+                    <th>CONTACT NUMBER</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in emp %}
+                <tr>
+                    <td>{{e.id}}</td>
+                    <td>{{e.employee_name}}</td>
+                    <td>{{e.department}}</td>
+                    <td>{{e.age}}</td>
+                    <td>{{e.email}}</td>
+                    <td>{{e.contact_number}}</td>
+                    <td><a href="{% url 'editpage' e.id %}">Edit</a></td>
+                    <td><a href="{% url 'deletepage' e.id %}">delete</a></td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </center>
+    
+</body>
+</html>

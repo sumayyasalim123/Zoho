@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="{% url 'result' %}">
+        <label>enter the first number</label>
+        <input type="number" name="num1"><br>
+        <label>enter the second number</label>
+        <input type="number" name="num2"><br>
+        <button type="submit">submit</button>
+        <input type="number" name="num3" value="{{sum}}">
+
+
+    </form>
+</body>
+</html>

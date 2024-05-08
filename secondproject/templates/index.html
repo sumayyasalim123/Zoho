@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <h1>Famous places of kerala</h1>
+    <div class="row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Thiruvananathapuram</h5>
+                    <p class="card-text">Thiruvananthapuram's economy comprises Information Technology, education,
+                        plantations, aerospace, commerce and tourism. Thiruvananthapuram district contributes 10.31%, of
+                        the state's GDP.</p>
+                    <a href="{% url 'kannur' %}" class="btn btn-primary">details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Ernakulam</h5>
+                    <p class="card-text">Ernakulam is the central business district of the city of Kochi, Kerala, India.
+                        It is the namesake of Ernakulam district. The eastern part of Kochi city is mainly known as
+                        Ernakulam, while the western part of it after the Venduruthy Bridge is called as Western Kochi.
+                    </p>
+                    <a href="{% url 'ernakulam' %}" class="btn btn-primary">details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Palakkad</h5>
+                    <p class="card-text">Palakkad , also known as Palghat, historically known as Palakkattussery, is a
+                        city and municipality in the Indian state of Kerala. It is the administrative headquarters of
+                        the Palakkad District. Palakkad is most densely populated municipality and fourth-most densely
+                        populated city in Kerala.
+                    </p>
+                    <a href="{% url 'palakkad' %}" class="btn btn-primary">details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
