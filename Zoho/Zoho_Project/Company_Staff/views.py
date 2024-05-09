@@ -32693,3 +32693,13 @@ def shareSalesByCustomerReportToEmail(request):
             print(e)
             messages.error(request, f'{e}')
             return redirect(Salesbycustomer)
+
+
+
+
+
+
+            
+def stock_summary(request):
+    
+    return render(request, 'stock_summary.html')

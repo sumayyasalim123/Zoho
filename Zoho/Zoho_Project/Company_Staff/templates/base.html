@@ -620,42 +620,51 @@
               </div>
             </li>
             
-            <!--  Reports modules -->
-            <li class="sidebar-item">
-              <button class="btn dropdown-btn" style="margin-top: 10px; border: none;outline: none; color: black;width: 100%;text-align: left;color: white;">
-                <span>
-                  <label><i class="fa fa-file-alt text-info" style="margin-right: 10px;"></i></label>
-                </span>
-                <span><label>Reports</label></span>
-                <i class="fa fa-caret-down" style="margin-left: 50%;"></i>
-                <button class="btn dropdown-btn" style="margin-top: 10px; border: none;outline: none; color: black;width: 100%;text-align: left;color: white;">
-                  
-                  <span><label  style="margin-left: 30px;">Sales</label></span>
-                  <i class="fa fa-caret-down" style="margin-left: 55%;"></i>
-                </button>
-               
-              </button>
+<!-- Reports modules -->
+<li class="sidebar-item">
+  <!-- Dropdown button for Reports -->
+  <button class="btn dropdown-btn" style="margin-top: 10px; border: none;outline: none; color: black;width: 100%;text-align: left;color: white;">
+    <span>
+      <label><i class="fa fa-file-alt text-info" style="margin-right: 10px;"></i></label>
+    </span>
+    <span><label>Reports</label></span>
+    <i class="fa fa-caret-down" style="margin-left: 50%;"></i>
+  </button>
 
-              <div class="dropdown-container" style="background-color: rgb(0, 0, 0);padding: 20px;justify-content: center;color: white;margin-left: 15%;">
-                
-               
-                {% if allmodules.reports == 1  %}
-                <a href="{% url 'Salesbycustomer' %}" class="d-flex align-items-center gap-2 dropdown-item">
-                  
-                  <div class="d-flex">
-                    <p class="mb-0 fs-3">Sales By Customer</p>
-                   
-                  </div>
-                
-                </a>
-                
-                
+  <!-- Dropdown container for Reports -->
+  <div class="dropdown-container" style="background-color: rgb(0, 0, 0);padding: 20px;justify-content: center;color: white;margin-left: 15%;">
+    {% if allmodules.reports == 1  %}
+    <!-- Sales and Stock Report options -->
+    <button class="btn dropdown-btn" style="margin-top: 10px; border: none;outline: none; color: black;width: 100%;text-align: left;color: white;">
+      <span><label  style="margin-left: 10px;">Sales</label></span>
+      <i class="fa fa-caret-down" style="margin-left: 40%;"></i>
+    </button>
+    <div class="dropdown-container">
+      <!-- Sales by Customer option -->
+      <a href="{% url 'Salesbycustomer' %}" class="d-flex align-items-center gap-2 dropdown-item">
+        <div class="d-flex">
+          <p class="mb-0 fs-3">Sales By Customer</p>
+        </div>
+      </a>
+    </div>
+    <hr>
 
-                <hr>
-                {% endif %}
-                
-              </div>
-            </li>
+    <button class="btn dropdown-btn" style="margin-top: 10px; border: none;outline: none; color: black;width: 100%;text-align: left;color: white;">
+      <span><label  style="margin-left: 10px;">Stock Report</label></span>
+      <i class="fa fa-caret-down" ></i>
+    </button>
+    <div class="dropdown-container">
+      <!-- Stock Summary option -->
+      <a href="{% url 'stock_summary' %}" class="d-flex align-items-center gap-2 dropdown-item">
+        <div class="d-flex">
+          <p class="mb-0 fs-3">Stock Summary</p>
+        </div>
+      </a>
+    </div>
+    <hr>
+    {% endif %}
+  </div>
+</li>
 
             
             

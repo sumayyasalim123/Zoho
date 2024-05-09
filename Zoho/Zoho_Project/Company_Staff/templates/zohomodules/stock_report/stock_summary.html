@@ -287,97 +287,25 @@
                                                             <table class="table table-responsive-md mt-4 table-hover" id="reportTable">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th class="text-center">CUSTOMER </th>
-                                                                        <th class="text-center">INVOICE COUNT</th>
-                                                                        <th class="text-center">SALES WITH TAX</th>
+                                                                        <th class="text-center">ITEM NAME </th>
+                                                                        <th class="text-center">ITEM IN</th>
+                                                                        <th class="text-center">ITEM OUT</th>
+                                                                        <th class="text-center">ITEM AVAILABLE FOR SALE</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    {% for i in reportData %}
+                                                                   
                                                                     <tr>
-                                                                        <td class="text-center">{{i.name}}</td>
-                                                                        <td class="text-center">{{i.count}}</td>
-                                                                        <td class="text-center">Rs. {{i.sales|floatformat:2 }}</td>
+                                                                        <td class="text-center">#</td>
+                                                                        <td class="text-center">#</td>
+                                                                        <td class="text-center">#</td>
                                                                     </tr>
-                                                                    {% endfor %}
+                                                                  
                                                                 </tbody>
                                                             </table>
                                                         </section>
                                             
-                                                        <section class="balance-info text-dark">
-                                                            <div class="row p-4">
-                                                                <div class="col-10">
-                                                                    <div class="row mb-2">
-                                                                        <div class="col-4">Total customers : <p style="font-size: 19px;">{{totalCustomers|default:0}}</p>
-                                                                        </div><br><br>
-                                                                    </div>
-                                                                    <div class="row mb-2">
-                                                                        <div class="col-4 ">Invoice Sale: <p id="sales" style="font-size: 19px;">₹<span id="totalInvoice">{{totalInvoice|default:0|floatformat:2 }}</span></p></div>
-                                                                        <div class="col-4">Recurring Invoice Sale: <p id="purchase" style="font-size: 19px;">₹<span id="totalReccuringinvoice">{{totalRecInvoice|default:0|floatformat:2}}</span></p></div>
-                                                                        <div class="col-4">Credit Note: <p id="expense" style="font-size: 19px;">₹<span id="totalCreditnote">{{totalCreditNote|default:0|floatformat:2}}</span></p></div>
-                                                                    </div>
-                                                                    <div class="row mb-2">
-                                                                        <div class="col-4 ">SubTotal: <p id="sales" style="font-size: 19px;">₹<span id="totalSale">{{subtotal|default:0|floatformat:2}}</span></p></div>
-                                                                        <div class="col-4">SubTotal Without Credit Note:<p id="expense" style="font-size: 19px;">₹<span id="totalSalewithoutCreditnotes">{{subtotalWOCredit|default:0|floatformat:2}}</span></p></div>
-                                                                        <div class="col-4">Total Sale:<br>(Without Credit Note)<p id="purchase" style="font-size: 19px;">₹<span id="grantTotal">{{totalSaleWOCredit|default:0|floatformat:2}}</span></p></div>
-                                                                    </div>
-                                                
-                                                                </div>
-                                                                <div class="col-2 text-center">
-                                                                    <h5 style="padding-top: 80px; color: #000; font-weight: bold;">Total Sale</h5>
-                                                                    <h4 class="text-dark" style="font-weight: 600;" id="totvalue">₹<span id="superTotal">{{totalSale|default:0|floatformat:2}}</span></h4>
-                                                                </div>
-                                                            </div>
-                                                        </section>
-                                                    </div>
-                                                        
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-    </div>
-    <div class="modal fade" id="shareToEmail">
-        <div class="modal-dialog">
-          <div class="modal-content" style="background-color: #3b3b3b;">
-            <div class="modal-header">
-              <h3 class="modal-title text-light" id="exampleModalLabel">Share Share By Customer</h3>
-              <button type="button" class="btn close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true" style="font-size: x-large;">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body mx-3" style="background-color: #000;">
-              <form action="{% url 'shareSalesByCustomerReportToEmail' %}" method="post" id="share_to_email_form" class="needs-validation" novalidate enctype="multipart/form-data">
-                {%csrf_token%}
-                <div class="form-group">
-                    <label for="emailIds">Email IDs</label>
-                    <textarea class="form-control" name="email_ids" id="emailIds" rows="3" placeholder="Multiple emails can be added by separating with a comma(,)." required></textarea>
-                </div>
-                <div class="form-group mt-2">
-                    <label for="item_unitname">Message(optional)</label>
-                    <textarea name="email_message" id="email_message" class="form-control" cols="" rows="4" placeholder="This message will be sent along with Bill details."></textarea>
-                </div>
-                <input type="text" name="transaction" id="trans" hidden>
-                <input type="date" name="start" id="startDt" hidden>
-                <input type="date" name="end" id="endDt" hidden>
-                <div class="row mt-3">
-                  <div class="col-md-4"></div>
-                  <div class="col-md-4">
-                    <div class="d-flex">
-                      <button class="btn save_btn btn-outline-warning mt-2 my-4 mx-2 w-50" type="button" id="share_with_email">Save</button> 
-                      <input class="btn save_btn btn-outline-warning mt-2 my-4 mx-2 w-50" data-dismiss="modal" type="reset" value="Close">
-                    </div>
-                  </div>
-                  <div class="col-md-4"></div>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer"></div>
-          </div>
-        </div>
-      </div>
+    
       <script>
         $(document).ready(function(){
             var trans = `{{transaction}}`;
