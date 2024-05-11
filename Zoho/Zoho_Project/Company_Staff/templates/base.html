@@ -648,12 +648,14 @@
       </a>
     </div>
     <hr>
-
+    {% endif %}
+    
     <button class="btn dropdown-btn" style="margin-top: 10px; border: none;outline: none; color: black;width: 100%;text-align: left;color: white;">
       <span><label  style="margin-left: 10px;">Stock Report</label></span>
       <i class="fa fa-caret-down" ></i>
     </button>
     <div class="dropdown-container">
+      {% if allmodules.reports == 1  %}
       <!-- Stock Summary option -->
       <a href="{% url 'stock_summary' %}" class="d-flex align-items-center gap-2 dropdown-item">
         <div class="d-flex">

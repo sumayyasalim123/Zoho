@@ -1,6 +1,12 @@
 #Zoho Final
 from django.shortcuts import render,redirect
 from Register_Login.models import *
+from django.shortcuts import render
+
+def stock_summary(request):
+    # Your code here
+    return render(request, 'stock_summary.html')
+
 from Register_Login.views import logout
 from django.contrib import messages
 from django.conf import settings
@@ -32697,9 +32703,78 @@ def shareSalesByCustomerReportToEmail(request):
 
 
 
+from django.db.models import Sum
 
-
-            
 def stock_summary(request):
-    
-    return render(request, 'stock_summary.html')
+    if 'login_id' in request.session:
+        log_id = request.session['login_id']
+        log_details = LoginDetails.objects.get(id=log_id)
+        if log_details.user_type == 'Company':
+            cmp = CompanyDetails.objects.get(login_details=log_details)
+            dash_details = CompanyDetails.objects.get(login_details=log_details)
+        else:
+            cmp = StaffDetails.objects.get(login_details=log_details).company
+            dash_details = StaffDetails.objects.get(login_details=log_details)
+
+        allmodules = ZohoModules.objects.get(company=cmp)
+
+        # Fetch items related to the company
+        items = Items.objects.filter(company=cmp)
+        item_data = []
+        for item in items:
+            # Calculate the total quantity sold for each item
+            total_quantity_sold = SalesOrderItems.objects.filter(
+                item=item, company=cmp
+            ).aggregate(total_quantity_sold=Sum('quantity'))['total_quantity_sold'] or 0
+
+            difference = item.current_stock - total_quantity_sold
+            item_data.append({
+                'item_name': item.item_name,
+                'opening_stock': item.opening_stock,
+                'quantity_sold': total_quantity_sold,
+                'difference': difference,
+            })
+
+        context = {
+            'cmp': cmp,
+            'details': dash_details,
+            'log_details': log_details,
+            'items': item_data,
+            'allmodules': allmodules
+        }
+        return render(request, 'zohomodules/Reports/stock_summary.html', context)
+    else:
+        # Handle the case when the user is not logged in
+        return redirect('/')
+
+
+
+def sales_by_customer_report(request):
+    if request.method == "GET":
+        start_date_str = request.GET.get('from_date')
+        end_date_str = request.GET.get('to_date')
+        
+        # Convert string dates to datetime objects
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+        
+        # Fetch sales orders within the specified date range
+        sales_orders = SaleOrder.objects.filter(sales_order_date__range=[start_date, end_date])
+        
+        items = []
+        for order in sales_orders:
+            # Fetch items sold in each order
+            order_items = SalesOrderItems.objects.filter(sales_order=order)
+            for item in order_items:
+                # Fetch the item's opening stock
+                item_object = Items.objects.get(id=item.item_id)
+                opening_stock = item_object.opening_stock
+                
+                items.append({
+                    'item_name': item.item.item_name,
+                    'opening_stock': opening_stock,
+                    'quantity_sold': item.quantity,
+                    'difference': opening_stock - item.quantity  # Calculate item available for sale
+                })
+        
+        return render(request, 'zohomodules/Reports/stock_summary.html', {'items': items, 'start_date': start_date_str, 'end_date': end_date_str})
