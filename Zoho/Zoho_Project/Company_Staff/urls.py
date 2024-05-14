@@ -758,7 +758,8 @@ urlpatterns = [
     path('salesByCustomerReportCustomized', views.salesByCustomerReportCustomized, name='salesByCustomerReportCustomized'),
     path('shareSalesByCustomerReportToEmail', views.shareSalesByCustomerReportToEmail, name='shareSalesByCustomerReportToEmail'),
     path('stock_summary', views.stock_summary, name='stock_summary'),
-    path('sales_by_customer_report', views.sales_by_customer_report, name='sales_by_customer_report'),
+    path('customize_stock_summary/',views.customize_stock_summary, name='customize_stock_summary'),
+    path('shareStockSummaryToEmail/', views.shareStockSummaryToEmail, name='shareStockSummaryToEmail'),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS)

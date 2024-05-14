@@ -184,37 +184,41 @@
                 </ol>
             </nav>
           <div> 
-           <!-- stock_summary.html -->
-<div>
-    <h1>Sales By Customer</h1>
-    <br>
-    <div class="row">
-        <div class="col-md-6 d-flex p-2">
-            <div class="col-md-6">
-                <div class="position-relative">
-                    <button class="btn btn-warning" onclick="toggleContent()"><i class="fas fa-gear"></i> Customize Report</button>
-                    <div id="contentDiv" class="content">
-                        <h6>Customize Report</h6>
-                        <form action="{% url 'sales_by_customer_report' %}" class="form reportCustomizeForm" method="get"> <!-- Updated action -->
-                            <div class="px-2">
-                                <label>From</label><br>
-                                <input name="from_date" class="inputdate form-control" type="date" id="startDate" value="{{ start_date }}">
+            <div class=" mt-lg-4 mt-2 rounded p-4" style="background-color: rgb(0, 0, 0);color: white;">
+                <h1 class="text-light">Stock Summary Report</h1>
+                <br>
+              
+                <div class="row  ">
+                    <div class="col-md-6 d-flex p-2 ">
+
+                      <div class="col-md-6">
+                        <div class="position-relative">
+                            <button class="btn btn-warning" onclick="toggleContent()"><i class="fas fa-gear"></i> Customize Report</button>
+                            <div id="contentDiv" class="content">
+                                <h6 style="color: white;">Customize Report</h6>
+                                <form action="{% url 'customize_stock_summary' %}" class="form reportCustomizeForm" method="get">
+                                    <div class="px-2">
+                                        <label style="text-align:left ">From</label><br>
+                                        <input name="from_date" class="inputdate form-control" type="date" id="startDate" value="{{startDate}}">
+                                    </div>
+                                    <div class="px-2">
+                                        <label style="text-align:left ">To</label><br>
+                                        <input name="to_date" type="date" class="inputdate form-control" id="endDate" value="{{endDate}}">
+                                    </div>
+
+                                    <div class="d-flex px-2 mt-3 mb-4">
+                                        <button type="submit" class="btn btn-outline-light w-50">Run Report</button>
+                                        <button type="reset" onclick="toggleContent()" class="btn btn-outline-light ml-1 w-50">Cancel</button>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="px-2">
-                                <label>To</label><br>
-                                <input name="to_date" type="date" class="inputdate form-control" id="endDate" value="{{ end_date }}">
-                            </div>
-                            <div class="d-flex px-2 mt-3 mb-4">
-                                <button type="submit" class="btn btn-outline-light w-50">Run Report</button>
-                                <button type="reset" onclick="toggleContent()" class="btn btn-outline-light ml-1 w-50">Cancel</button>
-                            </div>
-                        </form>
+                        </div>
+                      </div>
+                      
+                          
+                          
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
  
                         <div class="col-md-6 d-flex justify-content-end h-100 p-2">
                            
@@ -262,9 +266,9 @@
                                                     <div class="col-12">
                                                             <center class="h5 text-white"><b>{{cmp.company_name}}</b></center>
                                                             <center class="h3 text-white"><b>STOCK SUMMARY</b></center>
-                                                            {% if startDate and endDate %}
-                                                            <center class="h6 text-white">{{startDate}} TO {{endDate}}</center>
-                                                            {% endif %}
+                                                            {% if from_date and to_date %}
+                                                            <center class="h6 text-white">{{ from_date }} TO {{ to_date }}</center>
+                                                        {% endif %}
                                                     </div>  
                                                     <!-- <div class="col-md-4 d-flex justify-content-end"></div> -->
                                                 </div>
@@ -272,6 +276,7 @@
                                                     <div class="col-12">
                                                         <section class="product-area mt-2">
                                                             <table class="table table-responsive-md mt-4 table-hover" id="reportTable">
+                                                              
                                                                 <thead>
                                                                     <tr>
                                                                         <th class="text-center">ITEM NAME</th>
@@ -290,17 +295,59 @@
                                                                     </tr>
                                                                     {% endfor %}
                                                                 </tbody>
+                                                              
                                                             </table>
                                                         </section>
+
+                                                        <div class="modal fade" id="shareToEmail">
+                                                            <div class="modal-dialog">
+                                                              <div class="modal-content" style="background-color: #3b3b3b;">
+                                                                <div class="modal-header">
+                                                                  <h3 class="modal-title text-light" id="exampleModalLabel">Share Share By Customer</h3>
+                                                                  <button type="button" class="btn close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true" style="font-size: x-large;">&times;</span>
+                                                                  </button>
+                                                                </div>
+                                                                <div class="modal-body mx-3" style="background-color: #000;">
+                                                                  <form action="{% url 'shareStockSummaryToEmail' %}" method="post" id="share_to_email_form" class="needs-validation" novalidate enctype="multipart/form-data">
+                                                                    {%csrf_token%}
+                                                                    <div class="form-group">
+                                                                        <label for="emailIds">Email IDs</label>
+                                                                        <textarea class="form-control" name="email_ids" id="emailIds" rows="3" placeholder="Multiple emails can be added by separating with a comma(,)." required></textarea>
+                                                                    </div>
+                                                                    <div class="form-group mt-2">
+                                                                        <label for="item_unitname">Message(optional)</label>
+                                                                        <textarea name="email_message" id="email_message" class="form-control" cols="" rows="4" placeholder="This message will be sent along with Bill details."></textarea>
+                                                                    </div>
+                                                                   <div >
+                                                                    <input type="date" name="start" id="startDt" value="{{from_date}}" >
+                                                                    <input type="date" name="end" id="endDt" value="{{to_date}}" >
+                                                                </div>
+                                                                    <div class="row mt-3">
+                                                                      <div class="col-md-4"></div>
+                                                                      <div class="col-md-4">
+                                                                        <div class="d-flex">
+                                                                          <button class="btn save_btn btn-outline-warning mt-2 my-4 mx-2 w-50" type="button" id="share_with_email">Save</button> 
+                                                                          <input class="btn save_btn btn-outline-warning mt-2 my-4 mx-2 w-50" data-dismiss="modal" type="reset" value="Close">
+                                                                        </div>
+                                                                      </div>
+                                                                      <div class="col-md-4"></div>
+                                                                    </div>
+                                                                  </form>
+                                                                </div>
+                                                                <div class="modal-footer"></div>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+
     
       <script>
-        $(document).ready(function(){
-            var trans = `{{transaction}}`;
-            // alert(trans)
-            if(trans != "" && trans != 'all'){
-                $('#salesTransactions').val(trans)
-            }
-        })
+
+
+
+
+
+      
         function toggleContent() {
             var contentDiv = document.getElementById("contentDiv");
             if (contentDiv.style.display === "block") {
@@ -315,21 +362,22 @@
         }
     
         $('#toggleEmailModal').on('click',function(){
-            var st = $('#startDate').val();
-            var end = $('#endDate').val();
-            var trns = $('#salesTransactions').val();
-    
-            $('#trans').val(trns)
-            $('#startDt').val(st)
-            $('#endDt').val(end)
-    
-            if((st != "" && end == "") || (st == "" && end != "")){
-            alert('Please select both date inputs or select none')
-            return
-            }
-    
-            $('#shareToEmail').modal('toggle');
-        });
+    var st = $('#startDate').val();
+    var end = $('#endDate').val();
+
+    $('#startDt').val(st)
+    $('#endDt').val(end)
+
+    if((st != "" && end == "") || (st == "" && end != "")){
+        alert('Please select both date inputs or select none')
+        return
+    }
+    console.log("Start Date:", st);
+    console.log("End Date:", end);
+
+    $('#shareToEmail').modal('toggle');
+});
+
     
         $(document).ready(function(){
             $('#share_with_email').on('click',function(){
@@ -388,7 +436,7 @@
             var opt =
             {
                 margin: [0.5, 0.3, 0.3, 0.5],
-                filename: 'Report_SalesByCustomer',
+                filename: 'Report_Stocksummary',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'cm', format: 'letter', orientation: 'portrait' }
