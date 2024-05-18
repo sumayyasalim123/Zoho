@@ -38,7 +38,16 @@
                 <th>Difference</th>
             </tr>
         </thead>
-       
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.item_name }}</td>
+                <td>{{ item.opening_stock }}</td>
+                <td>{{ item.quantity_sold }}</td>
+                <td>{{ item.difference }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
     
 
