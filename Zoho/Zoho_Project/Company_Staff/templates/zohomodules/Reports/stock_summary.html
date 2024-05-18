@@ -304,7 +304,28 @@
                                                         <section class="product-area mt-2">
                                                             <table class="table table-responsive-md mt-4 table-hover" id="reportTable">
                                                                 {% if items %}
-                                                             
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center">ITEM NAME</th>
+                                                                        <th class="text-center">ITEM IN</th>
+                                                                        <th class="text-center">ITEM OUT</th>
+                                                                        <th class="text-center">ITEM AVAILABLE FOR SALE</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {% for item in items %}
+                                                                    <tr>
+                                                                        <td class="text-center">{{ item.item_name }}</td>
+                                                                        <td class="text-center">{{ item.opening_stock }}</td>
+                                                                        <td class="text-center">{{ item.quantity_sold }}</td>
+                                                                        <td class="text-center">{{ item.difference }}</td>
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                              
+                                                            </table>
+                                                            {% else %}
+                                                      
                                                                   
 
                                                       
