@@ -168,6 +168,33 @@
     .arrow.up {
         transform: rotate(180deg);
     }
+
+
+
+    .inputdate {
+    position: relative;
+    padding-right: 40px; /* Space for the calendar icon */
+    background-color: black; /* Assuming the background is black */
+    color: white; /* Set the text color to white */
+}
+
+.inputdate::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Inverts the color of the icon */
+    cursor: pointer;
+}
+
+.inputdate::-webkit-input-placeholder {
+    color: white; /* Color of the placeholder text */
+}
+
+.inputdate:-ms-input-placeholder {
+    color: white; /* Color of the placeholder text */
+}
+
+.inputdate::placeholder {
+    color: white; /* Color of the placeholder text */
+}
+
 </style>
 <body>       
     <div class="body-wrapper">
@@ -180,7 +207,7 @@
                     {% if log_details.user_type == 'Company' %}
                         <li class="breadcrumb-item"><a href="{% url 'company_dashboard' %}" class="text-warning">Dashboard</a></li>
                     {% endif %}
-                    <li class="breadcrumb-item" aria-current="page">Sales By Customer</li>
+                    <li class="breadcrumb-item" aria-current="page">Stock Summary</li>
                 </ol>
             </nav>
           <div> 
@@ -276,69 +303,11 @@
                                                     <div class="col-12">
                                                         <section class="product-area mt-2">
                                                             <table class="table table-responsive-md mt-4 table-hover" id="reportTable">
-                                                              
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th class="text-center">ITEM NAME</th>
-                                                                        <th class="text-center">ITEM IN</th>
-                                                                        <th class="text-center">ITEM OUT</th>
-                                                                        <th class="text-center">ITEM AVAILABLE FOR SALE</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    {% for item in items %}
-                                                                    <tr>
-                                                                        <td class="text-center">{{ item.item_name }}</td>
-                                                                        <td class="text-center">{{ item.opening_stock }}</td>
-                                                                        <td class="text-center">{{ item.quantity_sold }}</td>
-                                                                        <td class="text-center">{{ item.difference }}</td>
-                                                                    </tr>
-                                                                    {% endfor %}
-                                                                </tbody>
-                                                              
-                                                            </table>
-                                                        </section>
+                                                                {% if items %}
+                                                             
+                                                                  
 
-                                                        <div class="modal fade" id="shareToEmail">
-                                                            <div class="modal-dialog">
-                                                              <div class="modal-content" style="background-color: #3b3b3b;">
-                                                                <div class="modal-header">
-                                                                  <h3 class="modal-title text-light" id="exampleModalLabel">Share Share By Customer</h3>
-                                                                  <button type="button" class="btn close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true" style="font-size: x-large;">&times;</span>
-                                                                  </button>
-                                                                </div>
-                                                                <div class="modal-body mx-3" style="background-color: #000;">
-                                                                  <form action="{% url 'shareStockSummaryToEmail' %}" method="post" id="share_to_email_form" class="needs-validation" novalidate enctype="multipart/form-data">
-                                                                    {%csrf_token%}
-                                                                    <div class="form-group">
-                                                                        <label for="emailIds">Email IDs</label>
-                                                                        <textarea class="form-control" name="email_ids" id="emailIds" rows="3" placeholder="Multiple emails can be added by separating with a comma(,)." required></textarea>
-                                                                    </div>
-                                                                    <div class="form-group mt-2">
-                                                                        <label for="item_unitname">Message(optional)</label>
-                                                                        <textarea name="email_message" id="email_message" class="form-control" cols="" rows="4" placeholder="This message will be sent along with Bill details."></textarea>
-                                                                    </div>
-                                                                   <div >
-                                                                    <input type="date" name="start" id="startDt" value="{{from_date}}" >
-                                                                    <input type="date" name="end" id="endDt" value="{{to_date}}" >
-                                                                </div>
-                                                                    <div class="row mt-3">
-                                                                      <div class="col-md-4"></div>
-                                                                      <div class="col-md-4">
-                                                                        <div class="d-flex">
-                                                                          <button class="btn save_btn btn-outline-warning mt-2 my-4 mx-2 w-50" type="button" id="share_with_email">Save</button> 
-                                                                          <input class="btn save_btn btn-outline-warning mt-2 my-4 mx-2 w-50" data-dismiss="modal" type="reset" value="Close">
-                                                                        </div>
-                                                                      </div>
-                                                                      <div class="col-md-4"></div>
-                                                                    </div>
-                                                                  </form>
-                                                                </div>
-                                                                <div class="modal-footer"></div>
-                                                              </div>
-                                                            </div>
-                                                          </div>
+                                                      
 
     
       <script>
@@ -360,23 +329,47 @@
                 // contentDiv.style.left = buttonRect.left + "px";
             }
         }
-    
-        $('#toggleEmailModal').on('click',function(){
-    var st = $('#startDate').val();
-    var end = $('#endDate').val();
+        $('#toggleEmailModal').on('click', function() {
+    var st = $('#startDt').val(); // Corrected ID here
+    var end = $('#endDt').val(); // Corrected ID here
 
-    $('#startDt').val(st)
-    $('#endDt').val(end)
+    $('#startDt').val(st);
+    $('#endDt').val(end);
 
-    if((st != "" && end == "") || (st == "" && end != "")){
-        alert('Please select both date inputs or select none')
-        return
+    if ((st != "" && end == "") || (st == "" && end != "")) {
+        alert('Please select both date inputs or select none');
+        return;
     }
     console.log("Start Date:", st);
     console.log("End Date:", end);
 
     $('#shareToEmail').modal('toggle');
 });
+function collectDataAndSendToBackend() {
+    var from_date = document.getElementById('startDt').value;
+    var to_date = document.getElementById('endDt').value;
+    var email_ids = document.getElementById('emailIds').value;
+    var email_message = document.getElementById('email_message').value;
+
+    $.ajax({
+        url: '/send_stock_summary_email/',
+        type: 'POST',
+        data: {
+            from_date: from_date,
+            to_date: to_date,
+            email_ids: email_ids,
+            email_message: email_message,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function(response) {
+            console.log('Email sent successfully');
+        },
+        error: function(error) {
+            console.error('Error sending email:', error);
+        }
+    });
+}
+
 
     
         $(document).ready(function(){
@@ -462,7 +455,7 @@
             const ws = XLSX.utils.table_to_sheet(Table);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-            XLSX.writeFile(wb, "Report_SalesByCustomer.xlsx");
+            XLSX.writeFile(wb, "Report_stocksummary.xlsx");
         }
     
         let sortOrder = false; // false for ascending, true for descending
@@ -502,4 +495,5 @@
     </script>
 </body>
 </html>
+
 {% endblock %}

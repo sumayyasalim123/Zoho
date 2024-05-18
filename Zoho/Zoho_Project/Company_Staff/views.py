@@ -32733,7 +32733,7 @@ def stock_summary(request):
                 item=item, company=cmp
             ).aggregate(total_quantity_sold=Sum('quantity'))['total_quantity_sold'] or 0
 
-            difference = item.opening_stock - total_quantity_sold
+            difference = item.current_stock - total_quantity_sold
             item_data.append({
                 'item_name': item.item_name,
                 'opening_stock': item.opening_stock,
@@ -32755,6 +32755,11 @@ def stock_summary(request):
 
 
 
+
+
+
+
+
 def customize_stock_summary(request):
     if 'login_id' in request.session:
         log_id = request.session['login_id']
@@ -32768,23 +32773,26 @@ def customize_stock_summary(request):
 
         allmodules = ZohoModules.objects.get(company=cmp)
 
-    if request.method == 'GET':
+        # Get date range from request
         from_date = request.GET.get('from_date')
         to_date = request.GET.get('to_date')
-        
-        # Perform customization actions, if any
-        
-        # Retrieve items sold within the specified date range
-        items = Items.objects.filter(salesorderitems__sales_order__sales_order_date__range=[from_date, to_date]).distinct()
 
+        # Fetch items related to the company
+        items = Items.objects.filter(company=cmp)
         item_data = []
-        for item in items:
-            # Calculate the total quantity sold for each item within the selected date range
-            total_quantity_sold = SalesOrderItems.objects.filter(
-                item=item, sales_order__sales_order_date__range=[from_date, to_date]
-            ).aggregate(total_quantity_sold=Sum('quantity'))['total_quantity_sold'] or 0
 
-            difference = item.opening_stock - total_quantity_sold
+        for item in items:
+            # Filter SalesOrderItems based on date range if provided
+            sales_order_items_query = SalesOrderItems.objects.filter(item=item, company=cmp)
+            if from_date and to_date:
+                sales_order_items_query = sales_order_items_query.filter(
+                    sales_order__sales_order_date__range=[from_date, to_date]
+                )
+            total_quantity_sold = sales_order_items_query.aggregate(
+                total_quantity_sold=Sum('quantity')
+            )['total_quantity_sold'] or 0
+
+            difference = item.current_stock - total_quantity_sold
             item_data.append({
                 'item_name': item.item_name,
                 'opening_stock': item.opening_stock,
@@ -32793,61 +32801,54 @@ def customize_stock_summary(request):
             })
 
         context = {
-            'items': item_data,
-            'from_date': from_date,
-            'to_date': to_date,
             'cmp': cmp,
             'details': dash_details,
             'log_details': log_details,
+            'items': item_data,
             'allmodules': allmodules,
             'from_date': from_date,
             'to_date': to_date,
         }
-
-        # Return the stock summary template with customization parameters
         return render(request, 'zohomodules/Reports/stock_summary.html', context)
-
-
-
+    else:
+        # Handle the case when the user is not logged in
+        return redirect('/')
 
 
 def shareStockSummaryToEmail(request):
-    # Check if the user is logged in
     if 'login_id' in request.session:
+        log_id = request.session['login_id']
+        log_details= LoginDetails.objects.get(id=log_id)
+        if log_details.user_type == 'Company':
+            cmp = CompanyDetails.objects.get(login_details = log_details)
+            dash_details = CompanyDetails.objects.get(login_details=log_details)
+        else:
+            cmp = StaffDetails.objects.get(login_details = log_details).company
+            dash_details = StaffDetails.objects.get(login_details=log_details)
+
+
+            allmodules = ZohoModules.objects.filter(company=cmp, status='New')
+
         try:
-            # Get login details
-            log_id = request.session['login_id']
-            log_details = LoginDetails.objects.get(id=log_id)
-            
-            # Determine user type and fetch corresponding details
-            if log_details.user_type == 'Company':
-                cmp = CompanyDetails.objects.get(login_details=log_details)
-                dash_details = CompanyDetails.objects.get(login_details=log_details)
-            else:
-                cmp = StaffDetails.objects.get(login_details=log_details).company
-                dash_details = StaffDetails.objects.get(login_details=log_details)
-
-            # Process POST request
             if request.method == 'POST':
-                # Extract form data
-                email_ids = request.POST.get('email_ids')
-                email_message = request.POST.get('email_message')
-                from_date = request.GET.get('start')
-                to_date = request.GET.get('end')
+                emails_string = request.POST['email_ids']
+
+                # Split the string by commas and remove any leading or trailing whitespace
+                emails_list = [email.strip() for email in emails_string.split(',')]
+                email_message = request.POST['email_message']
+
+               
+                from_date = request.POST['start']
+                to_date = request.POST['end']
+               
+
                 
-                # Debugging: Print start and end dates
-                print("From Date:", from_date)
-                print("To Date:", to_date)
-
-                # Validate form data
                 if from_date and to_date:
-                    # Retrieve items sold within the specified date range
-                    items = Items.objects.filter(salesorderitems__sales_order__sales_order_date__range=[from_date, to_date]).distinct()
+                    items = Items.objects.filter(salesorderitems__sales_order__sales_order_date__range=[from_date, to_date]).filter(company=cmp).distinct()
 
-                    # Prepare item data for report
+                    
                     item_data = []
                     for item in items:
-                        # Calculate total quantity sold for each item within the selected date range
                         total_quantity_sold = SalesOrderItems.objects.filter(
                             item=item, sales_order__sales_order_date__range=[from_date, to_date]
                         ).aggregate(total_quantity_sold=Sum('quantity'))['total_quantity_sold'] or 0
@@ -32858,47 +32859,34 @@ def shareStockSummaryToEmail(request):
                             'opening_stock': item.opening_stock,
                             'quantity_sold': total_quantity_sold,
                             'difference': difference,
+                            
                         })
 
-                    # Generate PDF report
-                    context = {
-                        'items': item_data,
+                  
+                context = { 'items': item_data,
                         'from_date': from_date,
                         'to_date': to_date,
                         'cmp': cmp,
                         'details': dash_details,
                         'log_details': log_details,
-                    }
-                    template_path = 'zohomodules/Reports/stock_summary_pdf.html'
-                    html_string = get_template(template_path).render(context)
+                   }
+                template_path = 'zohomodules/Reports/stock_summary_Pdf.html'
+                template = get_template(template_path)
 
-                    # Convert HTML to PDF
-                    pdf_data = BytesIO()
-                    pisa_status = pisa.CreatePDF(html_string, dest=pdf_data)
+                html  = template.render(context)
+                result = BytesIO()
+                pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+                pdf = result.getvalue()
+                filename = f'stock summary report'
+                subject = f"stock summary Report"
+                # from django.core.mail import EmailMessage as EmailMsg
+                email = EmailMsg(subject, f"Hi,\nPlease find the attached Sales By Report. \n{email_message}\n\n--\nRegards,\n{cmp.company_name}\n{cmp.address}\n{cmp.state} - {cmp.country}\n{cmp.contact}", from_email=settings.EMAIL_HOST_USER, to=emails_list)
+                email.attach(filename, pdf, "application/pdf")
+                email.send(fail_silently=False)
 
-                    # Check PDF generation status
-                    if pisa_status.err:
-                        raise Exception('Failed to generate PDF: {}'.format(pisa_status.err))
-
-                    # Create and send email
-                    email = EmailMessage(
-                        subject=f'Stock Summary Report',
-                        body=email_message,
-                        from_email=settings.EMAIL_HOST_USER,
-                        to=email_ids.split(','),
-                    )
-                    email.attach('stock_summary.pdf', pdf_data.getvalue(), 'application/pdf')
-                    email.send()
-
-                    # Return success response
-                    return JsonResponse({'success': True})
-                else:
-                    # Return error response if date values are empty
-                    return JsonResponse({'success': False, 'error': 'Date values are empty'})
-
+                messages.success(request, 'Sales By Report details has been shared via email successfully..!')
+                return redirect(stock_summary)
         except Exception as e:
-            # Return error response for any exceptions
-            return JsonResponse({'success': False, 'error': str(e)})
-    
-    # Return error response for unauthorized access or invalid request method
-    return JsonResponse({'success': False, 'error': 'Unauthorized access or invalid request method'})
+            print(e)
+            messages.error(request, f'{e}')
+            return redirect(stock_summary)
