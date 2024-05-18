@@ -32829,47 +32829,10 @@ def shareStockSummaryToEmail(request):
 
             allmodules = ZohoModules.objects.filter(company=cmp, status='New')
 
-        try:
-            if request.method == 'POST':
-                emails_string = request.POST['email_ids']
-
-                # Split the string by commas and remove any leading or trailing whitespace
-                emails_list = [email.strip() for email in emails_string.split(',')]
-                email_message = request.POST['email_message']
-
-               
-                from_date = request.POST['start']
-                to_date = request.POST['end']
-               
-
-                
-                if from_date and to_date:
-                    items = Items.objects.filter(salesorderitems__sales_order__sales_order_date__range=[from_date, to_date]).filter(company=cmp).distinct()
-
-                    
-                    item_data = []
-                    for item in items:
-                        total_quantity_sold = SalesOrderItems.objects.filter(
-                            item=item, sales_order__sales_order_date__range=[from_date, to_date]
-                        ).aggregate(total_quantity_sold=Sum('quantity'))['total_quantity_sold'] or 0
-
-                        difference = item.current_stock - total_quantity_sold
-                        item_data.append({
-                            'item_name': item.item_name,
-                            'opening_stock': item.opening_stock,
-                            'quantity_sold': total_quantity_sold,
-                            'difference': difference,
-                            
-                        })
+                   
 
                   
-                context = { 'items': item_data,
-                        'from_date': from_date,
-                        'to_date': to_date,
-                        'cmp': cmp,
-                        'details': dash_details,
-                        'log_details': log_details,
-                   }
+             
                 template_path = 'zohomodules/Reports/stock_summary_Pdf.html'
                 template = get_template(template_path)
 
